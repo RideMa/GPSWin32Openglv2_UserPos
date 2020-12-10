@@ -67,7 +67,7 @@ struct ObserveData {
 	double altitude; //接收机或观测位置处的高程
 	double iono_A[4]; //电离层参数，来自导航电文
 	double iono_B[4]; //电离层参数，来自导航电文
-	double* pseudo_range; //伪距观测值,来自测站观测文件
+	double pseudo_range[32]; //伪距观测值,来自测站观测文件
 }; 
 
 
