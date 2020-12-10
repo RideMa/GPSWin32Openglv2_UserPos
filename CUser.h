@@ -6,12 +6,9 @@ class CUser {
 
 public:
 	CUser();
-	~CUser();//由于动态内存的出现，需要进行析构
 	int satNum;//save satellite number, however, its taken as a constant in current case
 	ObserveData observeData;//观测数值
-	double* V_ion;//电离层误差
-	double* V_trop;//对流层误差
-	double* V_tsi;//卫星钟差
+
 public:
 	CSatellite* sate;//定义为指针便于操作，后续可用于多卫星数据处理
 	void readEphemeris();//此函数读取星历文件

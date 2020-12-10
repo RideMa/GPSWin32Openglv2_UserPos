@@ -3,9 +3,6 @@
 
 CUser::CUser()
 {
-	V_ion = new double[satNum];//电离层误差
-	V_trop = new double[satNum];//对流层误差
-	V_tsi = new double[satNum];//卫星钟差
 
 	satNum = 6; //本程序中我们只处理6颗卫星的数据
 	sate = new CSatellite[satNum];
@@ -54,14 +51,6 @@ CUser::CUser()
 	bGotStationPos = false;
 	datahasRead = false;
 
-}
-
-CUser::~CUser()
-{
-	//释放动态内存
-	delete[] V_ion;
-	delete[] V_trop;
-	delete[] V_tsi;
 }
 
 void CUser::readEphemeris()
@@ -404,25 +393,18 @@ void CUser::processUserData()
 
 	double residualErr = 100; //控制循环计算过程
 	double delta = 1.0e-3;
-	//计算电离层、对流层、卫星钟差
-	for (int i = 0; i < satNum; i++) {
-		V_ion[i] = Ionospheric_Klobuchar_err(i);
-		V_trop[i] = Tropospheric_Hopfield_err(i);
-		V_tsi[i] = Clockerr(i);
-	}
-
 	do {
 		//每颗卫星进行误差计算，改正其伪距测量误差
 		for (int i = 0; i < satNum; i++) {
-			//double err = processErr(i);
-			seudoRange[i] = observeData.pseudo_range[i];//+ err;
+			double err = processErr(i);
+			seudoRange[i] = observeData.pseudo_range[i] + err;
 		}
 		//求解误差方程，得到最优解，返回残差
 		residualErr = CalculateUserPosition(seudoRange);
 		XYZ2LambdaPhiH(observeData.upos.x, observeData.upos.y, observeData.upos.z, observeData.longitude, observeData.Latitude, observeData.altitude);//将新的XYZ写入经纬度中
 	} while (residualErr > delta);
 	bGotStationPos = true;//完成计算后，给出信息，方便正确调用绘图函数
-
+	delete[] seudoRange;
 	//输出经纬度坐标
 	FILE* file=fopen("./position.txt", "w");
 	fprintf(file,"x:%.10lf,y:%.10lf,z:%.10lf\n", observeData.longitude, observeData.Latitude, observeData.altitude);
@@ -440,9 +422,7 @@ double CUser::CalculateUserPosition(double* seudoDis)
 	for (int i = 0; i < satNum; ++i)
 	{
 		approxRou[i] = sqrt(pow(sate[i].curPosition.x - observeData.upos.x, 2) + pow(sate[i].curPosition.y - observeData.upos.y, 2) + pow(sate[i].curPosition.z - observeData.upos.z, 2));
-		//L(i) = seudoDis[i] - approxRou[i];//原来代码，缺少电离层和对流层误差和卫星钟差
-		L(i) = seudoDis[i] - approxRou[i] + V_ion[i] + V_trop[i] - LIGHTSPEED * V_tsi[i];
-
+		L(i) = seudoDis[i] - approxRou[i];
 		A(i, 0) = -(sate[i].curPosition.x - observeData.upos.x) / approxRou[i];
 		A(i, 1) = -(sate[i].curPosition.y - observeData.upos.y) / approxRou[i];
 		A(i, 2) = -(sate[i].curPosition.z - observeData.upos.z) / approxRou[i];
@@ -455,6 +435,7 @@ double CUser::CalculateUserPosition(double* seudoDis)
 	observeData.upos.y += v(1);
 	observeData.upos.z += v(2);
 	observeData.t += v(3) / LIGHTSPEED;
+	delete[] approxRou;
 	double err = v(0) * v(0) + v(1) * v(1) + v(2) * v(2) + (v(3) / LIGHTSPEED) * (v(3) / LIGHTSPEED);
 	return err;
 }
