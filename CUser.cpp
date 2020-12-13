@@ -84,11 +84,22 @@ void CUser::readEphemeris()
 			if (sate[i].id >= 0)
 			{
 				double temp = 0;
-				for (int j = 0; j < 6; ++j)
-				{
-					file >> temp;
-					// 可以算toc
-				}
+
+				const int monthdays[11] = { 31, 28, 31, 30, 31, 30, 31, 31, 30, 31, 30 };
+				int y, mn, d, h, min;
+				double sec;
+				file >> y >> mn >> d >> h >> min >> sec;
+				// toc
+				int sumDay = y * 365;
+				for (int i = 0; i < mn - 1; i++)
+					sumDay += monthdays[i];
+
+				if (mn > 2) sumDay += y / 4;
+				else sumDay += (y - 1) / 4;
+				sumDay += (d - 1);
+				int ResDays = sumDay % 7;
+				sate[i].ephemeris.observt = ResDays * 86400 + h * 3600 + min * 60 + sec;
+
 				Ephemeris ep{};
 				if (file.is_open())
 				{
@@ -129,14 +140,14 @@ void CUser::CalculateSatPosition(CSatellite* sate)// get coordinate of current s
 		return;
 	Ephemeris e = sate->ephemeris;
 	//处理轨道计算
-	e.observt = e.toe;
+
 	// 修正后的角速度n
-	double n0 = sqrt(GM) / (pow(e.rA, 3));
+	double n0 = sqrt(GM / (pow(e.rA, 3)));
 	double n = n0 + e.dn;
 
 	// 平近点角M
 
-	double delta_t = e.observt - e.toe;
+	double delta_t = e.toc - e.toe;
 	double M = e.M0 + n * delta_t;
 
 	// 计算偏近点角E
@@ -163,14 +174,14 @@ void CUser::CalculateSatPosition(CSatellite* sate)// get coordinate of current s
 	double delta_i = e.Cic * cos(2 * raw_u) + e.Cis * sin(2 * raw_u);
 
 	// 精确r，u，i
-	double r = rt + delta_r, u = raw_u + delta_u, i = it + delta_i + e.I_dot * delta_t;
+	double r = rt + delta_r, u = raw_u + delta_u, i = it + delta_i;
 
 	// 平面x，y
 	double x = r * cos(u), y = r * sin(u);
 
 	double L;
 	// 计算L
-	L = e.omega + e.omega_dot * delta_t - Omega_dote * (delta_t + e.toe);
+	L = e.omega + e.omega_dot * delta_t - Omega_dote * e.toc;
 
 	double X = x * cos(L) - y * cos(i) * sin(L);
 	double Y = x * sin(L) + y * cos(i) * cos(L);
@@ -416,7 +427,6 @@ double CUser::CalculateUserPosition(double* seudoDis)
 	//基于C++矩阵计算库Eigen，编写用户位置计算代码
 	double* approxRou = new double[satNum];
 	VectorXd L(satNum);
-	VectorXd l(satNum), m(satNum), n(satNum);
 	MatrixXd A(satNum, 4);
 
 	for (int i = 0; i < satNum; ++i)

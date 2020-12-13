@@ -48,7 +48,7 @@ struct Ephemeris {
 	double w;
 	double toe;
 	double toc;
-	int observt;//observe time
+	double observt;//observe time
 };
 
 struct POINT3D
