@@ -9,7 +9,7 @@ CUser::CUser()
 
 	//初始化伪距变量
 	fstream file;
-	file.open("../data/20191126-163550Odata.txt");
+	file.open("./data/20191126-163550Odata.txt");
 	if (file.is_open())
 	{
 
@@ -67,7 +67,7 @@ void CUser::readEphemeris()
 
 	// 编写自己的代码
 	//读取6颗卫星的星历数据
-	fstream file("../data/20191126-163550Ndata.txt");
+	fstream file("./data/20191126-163550Ndata.txt");
 	if (file.is_open())
 	{
 		for (int i = 0; i < 4; ++i)
