@@ -4,12 +4,12 @@
 CUser::CUser()
 {
 
-	satNum = 6; //本程序中我们只处理6颗卫星的数据
+	satNum = 8; //本程序中我们只处理6颗卫星的数据
 	sate = new CSatellite[satNum];
 
 	//初始化伪距变量
 	fstream file;
-	file.open("./data/20191126-163550Odata.txt");
+	file.open("./data/2020Odata.txt");
 	if (file.is_open())
 	{
 
@@ -61,13 +61,13 @@ void CUser::readEphemeris()
 
 	Ephemeris ephemeris;
 
-	const int k = 6;//读取6颗/6组卫星的轨道参数
+	const int k = 8;//读取6颗/6组卫星的轨道参数
 	const int m = 36;//每组星历含时间在内共36个数据
 	double* data = new double[m];
 
 	// 编写自己的代码
 	//读取6颗卫星的星历数据
-	fstream file("./data/20191126-163550Ndata.txt");
+	fstream file("./data/2020Ndata.txt");
 	if (file.is_open())
 	{
 		for (int i = 0; i < 4; ++i)
@@ -98,7 +98,7 @@ void CUser::readEphemeris()
 				else sumDay += (y - 1) / 4;
 				sumDay += (d - 1);
 				int ResDays = sumDay % 7;
-				sate[i].ephemeris.observt = ResDays * 86400 + h * 3600 + min * 60 + sec;
+				
 
 				Ephemeris ep{};
 				if (file.is_open())
@@ -113,6 +113,7 @@ void CUser::readEphemeris()
 						>> ep.toc >> temp;
 				}
 				sate[i].ephemeris = ep;
+				sate[i].ephemeris.observt = ResDays * 86400 + h * 3600 + min * 60 + sec;
 			}
 			else exit(0);
 			sate[i].datahasRead = true;
@@ -145,7 +146,7 @@ void CUser::CalculateSatPosition(CSatellite* sate)// get coordinate of current s
 
 	// 平近点角M
 
-	double delta_t = e.toc - e.toe;
+	double delta_t = e.observt - e.toe;
 	double M = e.M0 + n * delta_t;
 
 	// 计算偏近点角E
@@ -405,7 +406,7 @@ void CUser::processUserData()
 		//每颗卫星进行误差计算，改正其伪距测量误差
 		for (int i = 0; i < satNum; i++) {
 			double err = processErr(i);
-			seudoRange[i] = observeData.pseudo_range[i] - err;
+			seudoRange[i] = observeData.pseudo_range[i] -err;
 		}
 		//求解误差方程，得到最优解，返回残差
 		residualErr = CalculateUserPosition(seudoRange);
