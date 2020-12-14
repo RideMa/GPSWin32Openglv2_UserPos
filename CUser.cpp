@@ -14,7 +14,7 @@ CUser::CUser()
 	{
 
 		double temp = 0;
-		const int monthdays[11] = { 31, 28, 31, 30, 31, 30, 31, 31, 30, 31, 30 };
+		const int monthdays[12] = { 31, 28, 31, 30, 31, 30, 31, 31, 30, 31, 30, 31 };
 		int y, mn, d, h, min, sec;
 		file >> y >> mn >> d >> h >> min >> sec;
 		// toc
@@ -85,7 +85,7 @@ void CUser::readEphemeris()
 			{
 				double temp = 0;
 
-				const int monthdays[11] = { 31, 28, 31, 30, 31, 30, 31, 31, 30, 31, 30 };
+				const int monthdays[12] = { 31, 28, 31, 30, 31, 30, 31, 31, 30, 31, 30, 31 };
 				int y, mn, d, h, min;
 				double sec;
 				file >> y >> mn >> d >> h >> min >> sec;
