@@ -36,7 +36,7 @@ AUX_RGBImageRec* LoadBMP(char* Filename)				// Loads A Bitmap Image
 
 void CEarth::CreateTexture()
 {
-	if (earthMap[1] = LoadBMP("../data/earthmap.bmp"))
+	if (earthMap[1] = LoadBMP("./data/earthmap.bmp"))
 	{
 		int sizeX = earthMap[1]->sizeX;
 		int sizeY = earthMap[1]->sizeY;
