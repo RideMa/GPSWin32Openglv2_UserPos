@@ -116,34 +116,34 @@ GLvoid KillGLWindow(GLvoid)								// Properly Kill The Window
 
 /*	This Code Creates Our OpenGL Window.  Parameters Are:					*
 *	title			- Title To Appear At The Top Of The Window				*
-*	width			- Width Of The GL Window *
-*	height			- Height Of The GL Window *
+*	width			- Width Of The GL Window								*
+*	height			- Height Of The GL Window								*
 *	bits			- Number Of Bits To Use For Color (8/16/24/32)			*/
 
 BOOL CreateGLWindow(char* title, int width, int height, int bits)
 {
-	GLuint		PixelFormat;			// Holds The Results After Searching For A Match
-	WNDCLASS	wc;						// Windows Class Structure
-	DWORD		dwExStyle;				// Window Extended Style
-	DWORD		dwStyle;				// Window Style
-	RECT		WindowRect;				// Grabs Rectangle Upper Left / Lower Right Values
-	WindowRect.left = (long)0;			// Set Left Value To 0
-	WindowRect.right = (long)width;		// Set Right Value To Requested Width
+	GLuint		PixelFormat;				// Holds The Results After Searching For A Match
+	WNDCLASS	wc;							// Windows Class Structure
+	DWORD		dwExStyle;					// Window Extended Style
+	DWORD		dwStyle;					// Window Style
+	RECT		WindowRect;					// Grabs Rectangle Upper Left / Lower Right Values
+	WindowRect.left = (long)0;				// Set Left Value To 0
+	WindowRect.right = (long)width;			// Set Right Value To Requested Width
 	WindowRect.top = (long)0;				// Set Top Value To 0
 	WindowRect.bottom = (long)height;		// Set Bottom Value To Requested Height
 
 
-	hInstance = GetModuleHandle(NULL);				// Grab An Instance For Our Window
-	wc.style = CS_HREDRAW | CS_VREDRAW | CS_OWNDC;	// Redraw On Size, And Own DC For Window.
+	hInstance = GetModuleHandle(NULL);					// Grab An Instance For Our Window
+	wc.style = CS_HREDRAW | CS_VREDRAW | CS_OWNDC;		// Redraw On Size, And Own DC For Window.
 	wc.lpfnWndProc = (WNDPROC)WndProc;					// WndProc Handles Messages
 	wc.cbClsExtra = 0;									// No Extra Window Data
 	wc.cbWndExtra = 0;									// No Extra Window Data
 	wc.hInstance = hInstance;							// Set The Instance
-	wc.hIcon = LoadIcon(NULL, IDI_WINLOGO);			// Load The Default Icon
+	wc.hIcon = LoadIcon(NULL, IDI_WINLOGO);				// Load The Default Icon
 	wc.hCursor = LoadCursor(NULL, IDC_ARROW);			// Load The Arrow Pointer
-	wc.hbrBackground = NULL;									// No Background Required For GL
-	wc.lpszMenuName = NULL;									// We Don't Want A Menu
-	wc.lpszClassName = _T("OpenGL");								// Set The Class Name
+	wc.hbrBackground = NULL;							// No Background Required For GL
+	wc.lpszMenuName = NULL;								// We Don't Want A Menu
+	wc.lpszClassName = _T("OpenGL");					// Set The Class Name
 
 	if (!RegisterClass(&wc))									// Attempt To Register The Window Class
 	{
