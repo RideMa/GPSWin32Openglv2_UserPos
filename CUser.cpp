@@ -124,8 +124,6 @@ void CUser::readEphemeris()
 
 }
 
-#define PIu 1 //如果使用的星历参数中含有半圆单位的参数，在计算前未乘以PI，请使用 PIu = PI
-
 //kepler function get root with Newton itertion
 //we start with E0 = M
 inline double calculateE(double e, double m, double En1)
@@ -142,7 +140,7 @@ void CUser::CalculateSatPosition(CSatellite* sate)// get coordinate of current s
 	//处理轨道计算
 
 	// 修正后的角速度n
-	double n0 = sqrt(GM / (pow(e.rA, 3)));
+	double n0 = sqrt(GM) / (pow(e.rA, 3));
 	double n = n0 + e.dn;
 
 	// 平近点角M
@@ -408,7 +406,7 @@ void CUser::processUserData()
 		//每颗卫星进行误差计算，改正其伪距测量误差
 		for (int i = 0; i < satNum; i++) {
 			double err = processErr(i);
-			seudoRange[i] = observeData.pseudo_range[i] - err;
+			seudoRange[i] = observeData.pseudo_range[i] -err;
 		}
 		//求解误差方程，得到最优解，返回残差
 		residualErr = CalculateUserPosition(seudoRange);
@@ -446,7 +444,7 @@ double CUser::CalculateUserPosition(double* seudoDis)
 	observeData.upos.z += v(2);
 	observeData.t += v(3) / LIGHTSPEED;
 	delete[] approxRou;
-	double err = v(0) * v(0) + v(1) * v(1) + v(2) * v(2) + (v(3) / LIGHTSPEED) * (v(3) / LIGHTSPEED);
+	double err = v(0) * v(0) + v(1) * v(1) + v(2) * v(2) + (v(3)) * (v(3));
 	return err;
 }
 

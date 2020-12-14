@@ -27,7 +27,7 @@ using namespace std;
 #define PI 3.14159265758f //圆周率
 #define F_RELATIVITY -4.442807633e-10 // 相对论误差中，椭圆轨道导致的误差公式里面的常数
 #define SCALE 100000 //可视化时，将实际尺度缩小10万倍，如轨道半径由原来的米变为"百公里"
-#define LIGHTSPEED 299792458
+#define LIGHTSPEED 299792458.0
 
 //此处应添加其它常数，如光速，相对论改正常数等
 
