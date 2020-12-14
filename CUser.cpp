@@ -223,7 +223,7 @@ double CUser::processErr(short sateID)
 	double dtrop = Tropospheric_Hopfield_err(sateID);//对流层误差
 
 	double sumerr = 0;
-	sumerr = dtrop + dion + dclk + drclk;
+	sumerr = dtrop + dion + dclk;// +drclk;
 	return sumerr;
 
 }
@@ -406,11 +406,10 @@ void CUser::processUserData()
 		//每颗卫星进行误差计算，改正其伪距测量误差
 		for (int i = 0; i < satNum; i++) {
 			double err = processErr(i);
-			seudoRange[i] = observeData.pseudo_range[i] -err;
+			seudoRange[i] = observeData.pseudo_range[i] + err;
 		}
 		//求解误差方程，得到最优解，返回残差
 		residualErr = CalculateUserPosition(seudoRange);
-		residualErr = 0;
 		XYZ2LambdaPhiH(observeData.upos.x, observeData.upos.y, observeData.upos.z, observeData.longitude, observeData.Latitude, observeData.altitude);//将新的XYZ写入经纬度中
 	} while (residualErr > delta);
 	bGotStationPos = true;//完成计算后，给出信息，方便正确调用绘图函数
@@ -472,7 +471,7 @@ void CUser::render()
 			glColor3f(1.0f, 1.0f, 0.0f);
 
 			glPushMatrix();
-			glTranslatef(observeData.upos.x / SCALE, observeData.upos.z / SCALE, observeData.upos.y / SCALE);
+			glTranslatef(observeData.upos.y / SCALE, observeData.upos.z / SCALE, observeData.upos.x / SCALE);
 			auxWireOctahedron(7);
 			glPopMatrix();
 
