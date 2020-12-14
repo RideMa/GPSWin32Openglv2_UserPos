@@ -4,12 +4,12 @@
 CUser::CUser()
 {
 
-	satNum = 8; //本程序中我们只处理6颗卫星的数据
+	satNum = SAT_NUM; //本程序中我们只处理6颗卫星的数据
 	sate = new CSatellite[satNum];
 
 	//初始化伪距变量
 	fstream file;
-	file.open("./data/2020Odata.txt");
+	file.open(DIST_PATH);
 	if (file.is_open())
 	{
 
@@ -33,8 +33,8 @@ CUser::CUser()
 			file >> observeData.pseudo_range[i] >> temp >> temp >> temp;
 
 		observeData.T = 5 + 273.15;
-		observeData.P = 1013e2;
-		observeData.Pva = 6.0;
+		observeData.P = 101.3;
+		observeData.Pva = 0.6;
 		file.close();
 	}
 
@@ -59,15 +59,9 @@ void CUser::readEphemeris()
 		return;
 
 
-	Ephemeris ephemeris;
-
-	const int k = 8;//读取6颗/6组卫星的轨道参数
-	const int m = 36;//每组星历含时间在内共36个数据
-	double* data = new double[m];
-
 	// 编写自己的代码
-	//读取6颗卫星的星历数据
-	fstream file("./data/2020Ndata.txt");
+	//读取n颗卫星的星历数据
+	fstream file(EPHE_PATH);
 	if (file.is_open())
 	{
 		for (int i = 0; i < 4; ++i)
@@ -216,14 +210,18 @@ double CUser::processErr(short sateID)
 
 	//编程时可取消下面注释，定义常数LIGHTSPEED后，正常使用下面代码
 
-	double dclk = Clockerr(sateID) * LIGHTSPEED;//时钟误差
-	double drclk = Clockrelative_err(sateID) * LIGHTSPEED;//相对论误差
 
-	double dion = Ionospheric_Klobuchar_err(sateID) * LIGHTSPEED;//电离层误差
 	double dtrop = Tropospheric_Hopfield_err(sateID);//对流层误差
 
+	double dion = Ionospheric_Klobuchar_err(sateID) * LIGHTSPEED;//电离层误差
+
+	double dclk = Clockerr(sateID) * LIGHTSPEED;//时钟误差
+
+	double drclk = Clockrelative_err(sateID) * LIGHTSPEED;//相对论误差
+
+
 	double sumerr = 0;
-	sumerr = dtrop + dion + dclk +drclk;
+	sumerr = dtrop + dion + dclk;// +drclk;
 	return sumerr;
 
 }
@@ -387,7 +385,7 @@ double CUser::Tropospheric_Hopfield_err(short sateID)
 	double hw = 11000; // 湿气部分的高度
 	double hd = 40136 + 148.72 * (observeData.T - 273.16); // 干气部分的高度
 	double Kd = 155.2e-7 * observeData.P * (hd - h) / observeData.T;  // 干气部分的延长
-	double Kw = 155.2e-7 * 4810 * observeData.Pva * (hw - h) / observeData.T; // 湿气部分的延长
+	double Kw = 155.2e-7 * 4810 * observeData.Pva * (hw - h) / observeData.T / observeData.T; // 湿气部分的延长
 
 	// 返回在干湿方向上投影完成的加和，也就是对流层对信号的延迟
 	Trop_delay = (Kd / sin(Angle2Arc(sqrt(el * el + 6.25)))) + (Kw / sin(Angle2Arc(sqrt(el * el + 2.25))));
@@ -471,7 +469,7 @@ void CUser::render()
 			glColor3f(1.0f, 1.0f, 0.0f);
 
 			glPushMatrix();
-			glTranslatef(observeData.upos.y / SCALE, observeData.upos.z / SCALE, observeData.upos.x / SCALE);
+			//glTranslatef(observeData.upos.y / SCALE, observeData.upos.z / SCALE, observeData.upos.x / SCALE);
 			auxWireOctahedron(7);
 			glPopMatrix();
 
