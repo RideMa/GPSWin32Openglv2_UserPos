@@ -177,9 +177,8 @@ void CUser::CalculateSatPosition(CSatellite* sate)// get coordinate of current s
 	// 平面x，y
 	double x = r * cos(u), y = r * sin(u);
 
-	double L;
 	// 计算L
-	L = e.omega + e.omega_dot * delta_t - Omega_dote * e.toc;
+	double L = e.omega + e.omega_dot * delta_t - Omega_dote * e.toc;
 
 	double X = x * cos(L) - y * cos(i) * sin(L);
 	double Y = x * sin(L) + y * cos(i) * cos(L);
@@ -410,6 +409,7 @@ void CUser::processUserData()
 		}
 		//求解误差方程，得到最优解，返回残差
 		residualErr = CalculateUserPosition(seudoRange);
+		residualErr = 0;
 		XYZ2LambdaPhiH(observeData.upos.x, observeData.upos.y, observeData.upos.z, observeData.longitude, observeData.Latitude, observeData.altitude);//将新的XYZ写入经纬度中
 	} while (residualErr > delta);
 	bGotStationPos = true;//完成计算后，给出信息，方便正确调用绘图函数
