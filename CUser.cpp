@@ -223,7 +223,7 @@ double CUser::processErr(short sateID)
 	double dtrop = Tropospheric_Hopfield_err(sateID);//对流层误差
 
 	double sumerr = 0;
-	sumerr = dtrop + dion + dclk;// +drclk;
+	sumerr = dtrop + dion + dclk +drclk;
 	return sumerr;
 
 }
@@ -333,7 +333,7 @@ double CUser::Ionospheric_Klobuchar_err(short sateID)
 
 	// 将经纬度高程坐标准换为ENU坐标。也就是将卫星坐标转换到测站坐标系下
 	double E = 0, N = 0, U = 0;
-	LambdaPhiH2ENU(dz, dy, dz, lambda, phi, h, E, N, U);
+	LambdaPhiH2ENU(dx, dy, dz, lambda, phi, h, E, N, U);
 
 	// 必要参数，这里所有的角度都使用弧度制，因为math.h使用的都是弧度制，在需要的时候再进行转换
 	double norm = sqrt(E * E + N * N + U * U); // 模
@@ -379,7 +379,7 @@ double CUser::Tropospheric_Hopfield_err(short sateID)
 
 	// 将经纬度高程坐标准换为ENU坐标。也就是将卫星坐标转换到测站坐标系下
 	double E = 0, N = 0, U = 0;
-	LambdaPhiH2ENU(dz, dy, dz, lambda, phi, h, E, N, U);
+	LambdaPhiH2ENU(dx, dy, dz, lambda, phi, h, E, N, U);
 
 	double norm = sqrt(E * E + N * N + U * U); // 模
 	double el = asin(U / norm); // 卫星高度角
