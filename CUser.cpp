@@ -40,9 +40,9 @@ CUser::CUser()
 
 	//初始化用户初始位置
 	observeData.upos = *new POINT3D();
-	observeData.upos.x = 0;
-	observeData.upos.y = 0;
-	observeData.upos.z = 0;
+	observeData.upos.x = -2165390.324400646;
+	observeData.upos.y = 4380659.056451826;
+	observeData.upos.z = 4098945.436700276;
 
 	for (int i = 0; i < satNum; i++)
 		sate[i].id = i;
@@ -405,7 +405,7 @@ void CUser::processUserData()
 		//每颗卫星进行误差计算，改正其伪距测量误差
 		for (int i = 0; i < satNum; i++) {
 			double err = processErr(i);
-			seudoRange[i] = observeData.pseudo_range[i] -err;
+			seudoRange[i] = observeData.pseudo_range[i] - err;
 		}
 		//求解误差方程，得到最优解，返回残差
 		residualErr = CalculateUserPosition(seudoRange);
@@ -444,7 +444,7 @@ double CUser::CalculateUserPosition(double* seudoDis)
 	observeData.upos.z += v(2);
 	observeData.t += v(3) / LIGHTSPEED;
 	delete[] approxRou;
-	double err = v(0) * v(0) + v(1) * v(1) + v(2) * v(2) + (v(3)) * (v(3));
+	double err = v(0) * v(0) + v(1) * v(1) + v(2) * v(2) + (v(3) / LIGHTSPEED) * (v(3) / LIGHTSPEED);
 	return err;
 }
 
