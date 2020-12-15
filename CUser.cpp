@@ -222,7 +222,7 @@ double CUser::processErr(short sateID)
 
 
 	double sumerr = 0;
-	sumerr = dtrop + dion + dclk;// +drclk;
+	sumerr = - dtrop - dion + dclk;// +drclk;
 	return sumerr;
 
 }
