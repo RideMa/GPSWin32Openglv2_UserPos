@@ -107,7 +107,8 @@ void CUser::readEphemeris()
 						>> ep.toc >> temp;
 				}
 				sate[i].ephemeris = ep;
-				sate[i].ephemeris.observt = ResDays * 86400 + h * 3600 + min * 60 + sec;
+				sate[i].ephemeris.toc = ResDays * 86400 + h * 3600 + min * 60 + sec;
+				sate[i].ephemeris.observt = observeData.t;
 			}
 			else exit(0);
 			sate[i].datahasRead = true;
@@ -173,7 +174,7 @@ void CUser::CalculateSatPosition(CSatellite* sate)// get coordinate of current s
 	double x = r * cos(u), y = r * sin(u);
 
 	// 计算L
-	double L = e.omega + e.omega_dot * delta_t - Omega_dote * e.toc;
+	double L = e.omega + e.omega_dot * delta_t - Omega_dote * e.observt;
 
 	double X = x * cos(L) - y * cos(i) * sin(L);
 	double Y = x * sin(L) + y * cos(i) * cos(L);
@@ -221,7 +222,7 @@ double CUser::processErr(short sateID)
 
 
 	double sumerr = 0;
-	sumerr = dtrop + dion + dclk;// +drclk;
+	sumerr = - dtrop - dion + dclk;// +drclk;
 	return sumerr;
 
 }
@@ -380,7 +381,7 @@ double CUser::Tropospheric_Hopfield_err(short sateID)
 	LambdaPhiH2ENU(dx, dy, dz, lambda, phi, h, E, N, U);
 
 	double norm = sqrt(E * E + N * N + U * U); // 模
-	double el = asin(U / norm); // 卫星高度角
+	double el = Arc2Angle(asin(U / norm)); // 卫星高度角
 
 	double hw = 11000; // 湿气部分的高度
 	double hd = 40136 + 148.72 * (observeData.T - 273.16); // 干气部分的高度
