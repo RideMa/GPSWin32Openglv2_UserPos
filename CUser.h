@@ -2,9 +2,9 @@
 #include "myWork.h"
 #include "CSatellite.h"
 
-#define EPHE_PATH "./data/2020Ndata.txt"
-#define DIST_PATH "./data/2020Odata.txt"
-#define SAT_NUM 8
+#define EPHE_PATH "./data/2019Ndata.txt"
+#define DIST_PATH "./data/2019Odata.txt"
+#define SAT_NUM 6
 
 class CUser {
 
