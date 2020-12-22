@@ -400,7 +400,7 @@ void CUser::processUserData()
 	double* seudoRange = new double[satNum];
 
 	double residualErr = 100; //控制循环计算过程
-	double delta = 1.0e-3;
+	double delta = 1.0e-12;
 	do {
 		//每颗卫星进行误差计算，改正其伪距测量误差
 		for (int i = 0; i < satNum; i++) {
