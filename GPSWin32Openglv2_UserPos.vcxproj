@@ -80,6 +80,8 @@
     </Link>
   </ItemDefinitionGroup>
   <ItemGroup>
+    <None Include="data\2019_11_26_16-35-50.19N" />
+    <None Include="data\2019_11_26_16-35-50.19O" />
     <None Include="packages.config" />
     <None Include="ReadMe.txt" />
   </ItemGroup>
@@ -97,6 +99,20 @@
     <ClCompile Include="CUser.cpp" />
     <ClCompile Include="myWork.cpp" />
     <ClCompile Include="GPSWin32Openglv2_UserPos.cpp" />
+  </ItemGroup>
+  <ItemGroup>
+    <Text Include="data\2019Ndata.txt" />
+    <Text Include="data\2019Odata.txt" />
+    <Text Include="data\2020Ndata.txt" />
+    <Text Include="data\2020Odata.txt" />
+    <Text Include="data\sat_nav_data1.txt" />
+    <Text Include="data\testN141.txt" />
+    <Text Include="data\testO141.txt" />
+    <Text Include="data\用户位置真实观测值.txt" />
+    <Text Include="position.txt" />
+  </ItemGroup>
+  <ItemGroup>
+    <Image Include="data\earthmap.bmp" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
   <ImportGroup Label="ExtensionTargets">

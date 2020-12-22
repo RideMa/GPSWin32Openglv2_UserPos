@@ -414,8 +414,17 @@ void CUser::processUserData()
 	bGotStationPos = true;//完成计算后，给出信息，方便正确调用绘图函数
 	delete[] seudoRange;
 	//输出经纬度坐标
-	FILE* file=fopen("./position.txt", "w");
-	fprintf(file,"x:%.10lf,y:%.10lf,z:%.10lf\n", observeData.longitude, observeData.Latitude, observeData.altitude);
+	FILE* file=fopen("./position.txt", "a+");
+	time_t curtime;
+
+	time(&curtime);
+	char* src;
+	src = ctime(&curtime);
+	char dest[100];
+	strncpy(dest, src, strlen(src) - 1);
+	dest[strlen(src) - 1] = '\0';
+	fprintf(file, "%s:\t", dest);
+	fprintf(file,"lon:%.10lf, lat:%.10lf, altitude:%.10lf\n", observeData.longitude, observeData.Latitude, observeData.altitude);
 	fclose(file);
 }
 

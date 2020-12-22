@@ -13,10 +13,19 @@
       <UniqueIdentifier>{67DA6AB6-F800-4c08-8B7A-83BB121AAD01}</UniqueIdentifier>
       <Extensions>rc;ico;cur;bmp;dlg;rc2;rct;bin;rgs;gif;jpg;jpeg;jpe;resx;tiff;tif;png;wav;mfcribbon-ms</Extensions>
     </Filter>
+    <Filter Include="资源文件\data">
+      <UniqueIdentifier>{3d56cdf0-98c5-45a1-8fa7-5d5a637a8729}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <None Include="ReadMe.txt" />
     <None Include="packages.config" />
+    <None Include="data\2019_11_26_16-35-50.19N">
+      <Filter>资源文件\data</Filter>
+    </None>
+    <None Include="data\2019_11_26_16-35-50.19O">
+      <Filter>资源文件\data</Filter>
+    </None>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="myWork.h">
@@ -54,5 +63,39 @@
     <ClCompile Include="CUser.cpp">
       <Filter>源文件</Filter>
     </ClCompile>
+  </ItemGroup>
+  <ItemGroup>
+    <Text Include="position.txt">
+      <Filter>资源文件</Filter>
+    </Text>
+    <Text Include="data\2019Ndata.txt">
+      <Filter>资源文件\data</Filter>
+    </Text>
+    <Text Include="data\2019Odata.txt">
+      <Filter>资源文件\data</Filter>
+    </Text>
+    <Text Include="data\2020Ndata.txt">
+      <Filter>资源文件\data</Filter>
+    </Text>
+    <Text Include="data\2020Odata.txt">
+      <Filter>资源文件\data</Filter>
+    </Text>
+    <Text Include="data\sat_nav_data1.txt">
+      <Filter>资源文件\data</Filter>
+    </Text>
+    <Text Include="data\testN141.txt">
+      <Filter>资源文件\data</Filter>
+    </Text>
+    <Text Include="data\testO141.txt">
+      <Filter>资源文件\data</Filter>
+    </Text>
+    <Text Include="data\用户位置真实观测值.txt">
+      <Filter>资源文件\data</Filter>
+    </Text>
+  </ItemGroup>
+  <ItemGroup>
+    <Image Include="data\earthmap.bmp">
+      <Filter>资源文件\data</Filter>
+    </Image>
   </ItemGroup>
 </Project>

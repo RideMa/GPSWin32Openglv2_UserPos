@@ -10,7 +10,7 @@
 #include <tchar.h>			
 
 #include <math.h>
-
+#include <ctime>
 #include <iostream>
 #include <fstream>
 
